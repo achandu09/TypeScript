@@ -1,0 +1,10 @@
+doctype html
+html
+    head
+      link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous")
+    body.bg-dark.text-center
+        h1.card-title.text-danger Login 
+        form.container-sm.span6(action="/", method="post")
+            input.form-control.m-3.mr-sm-2(type="text", name="name" , placeholder="Username" required)
+            input.form-control.m-3.mr-sm-2(type="text", name="pass",placeholder="PassWord" required)
+            input.btn.btn-danger(type="submit", value="Get Contacts")
