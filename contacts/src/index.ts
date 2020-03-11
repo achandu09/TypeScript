@@ -4,6 +4,7 @@ import Router from '@koa/router'
 import db from 'lowdb'
 import Filesync from 'lowdb/adapters/Filesync'
 import bodyparser from 'koa-bodyparser'
+import e from 'express'
 const app=new Koa()
 new Pug({
     viewPath:'./res/views',
@@ -16,18 +17,55 @@ const adapters1 = new Filesync('./res/db1.json')
 const mydb=new db(adapters)
 const mydb1=new db(adapters1)
 const router = new Router()
-router.get('/sample/:user',async (ctx)=>{
-    var contact1=mydb1.get(`${ctx.params.user}`).value()
+router.get('/sample',async (ctx)=>{
+    if(JSON.stringify(ctx.cookies.get("user"))==undefined){
+        //console.log("hello")
+        await ctx.redirect('/')
+    }
+    else{
+    var contact1=mydb1.get(`${ctx.cookies.get("user")}`).value()
     var shared=mydb1.get(`shared`).value()
     var contacts={
         contact1,
         shared
     }
+    //console.log("hello1")
     await ctx.render('sample',{contacts})
+}
 })
 
 router.get('/', async ctx=>{
     await ctx.render('index')
+})
+router.post('/del/shared/:num',async ctx=>{
+    //console.log('Successful')
+    //`${ctx.cookies.get("user")}`
+    mydb1.get("shared").remove({phone: `${ctx.params.num}`}).write()
+    await ctx.redirect("/sample")
+})
+router.post('/del/user/:num',async ctx=>{
+    //console.log('Successful')
+    mydb1.get(`${ctx.cookies.get("user")}`).remove({phone: `${ctx.params.num}`}).write()
+    await ctx.redirect("/sample")
+})
+router.post('/add/user',async ctx=>{
+    const contacts = mydb1.get(`${ctx.cookies.get("user")}`).value()
+    contacts.push({
+        ...ctx.request.body
+    })
+    await ctx.redirect('/sample')
+})
+router.post('/add/shared',async ctx=>{
+    const shared = mydb1.get("shared").value()
+    shared.push({
+        ...ctx.request.body
+    })
+    await ctx.redirect('/sample')
+})
+router.post('/logout',async ctx=>{
+    ctx.cookies.set("user","")
+    console.log("LoggedOut")
+    await ctx.redirect('/')
 })
 router.post('/',async ctx=>{
     const userl=mydb.get("users").value();
@@ -44,7 +82,8 @@ router.post('/',async ctx=>{
         }
     }
     if(flag){
-        await ctx.redirect(`/sample/con${uname}`)
+        ctx.cookies.set("user",`con${uname}`)
+        await ctx.redirect("/sample")
     }   
     if(!flag){
     await ctx.redirect('/')}

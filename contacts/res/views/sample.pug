@@ -1,0 +1,65 @@
+doctype html
+html
+ head
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous")
+ body.bg-dark.text-center
+    .card.bg-dark.text-red.mx-auto(style="width: 1000px")
+      .card-body
+        h1.card-title.text-danger="My Contacts"
+        table.table.table-bordered.text-white
+          thead
+            tr
+              th="Name"
+              th="Phone"
+              th="Email"
+              th="Delete"
+          tbody
+            each contact in contacts.contact1
+              tr
+                td=contact.name
+                td=contact.phone
+                td=contact.email
+                td
+                  form(action=`/del/user/${contact.phone}`, method="post")
+                    button.btn.btn-danger(type="submit")="X"
+
+            tr
+              form(action="/add/user", method="post")
+                td
+                  input.form-control(type="text", name="name" placeholder="Name" required)
+                td
+                  input.form-control(type="text" name="phone" pattern="[0-9]{10}" placeholder="Phone" required)
+                td
+                  input.form-control(type="email" name="email" placeholder="Email" required)
+                td
+                  button.btn.btn-danger(type="submit")="ADD"
+        h1.card-title.text-danger="Shared Contacts"
+        table.table.table-bordered.text-white
+          thead
+            tr
+              th="Name"
+              th="Phone"
+              th="Email"
+              th="Delete"
+          tbody
+            each contact in contacts.shared
+              tr
+                td=contact.name
+                td=contact.phone
+                td=contact.email
+                td
+                  form(action=`/del/shared/${contact.phone}`, method="post")
+                    button.btn.btn-danger(type="submit")="X"
+
+            tr
+              form(action="/add/shared", method="post")
+                td
+                  input.form-control(type="text" name="name" placeholder="Name" required)
+                td
+                  input.form-control(type="text" name="phone" pattern="[0-9]{10}" placeholder="Phone" required)
+                td
+                  input.form-control(type="email" name="email" placeholder="Email" required)
+                td
+                  button.btn.btn-danger(type="submit")="ADD"
+      form(action="/logout",method="post")
+        button.btn.btn-danger(type="submit")="LOGOUT"

@@ -29,17 +29,50 @@ const adapters1 = new Filesync_1.default('./res/db1.json');
 const mydb = new lowdb_1.default(adapters);
 const mydb1 = new lowdb_1.default(adapters1);
 const router = new router_1.default();
-router.get('/sample/:user', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    var contact1 = mydb1.get(`${ctx.params.user}`).value();
-    var shared = mydb1.get(`shared`).value();
-    var contacts = {
-        contact1,
-        shared
-    };
-    yield ctx.render('sample', { contacts });
+router.get('/sample', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    if (JSON.stringify(ctx.cookies.get("user")) == undefined) {
+        //console.log("hello")
+        yield ctx.redirect('/');
+    }
+    else {
+        var contact1 = mydb1.get(`${ctx.cookies.get("user")}`).value();
+        var shared = mydb1.get(`shared`).value();
+        var contacts = {
+            contact1,
+            shared
+        };
+        //console.log("hello1")
+        yield ctx.render('sample', { contacts });
+    }
 }));
 router.get('/', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     yield ctx.render('index');
+}));
+router.post('/del/shared/:num', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    //console.log('Successful')
+    //`${ctx.cookies.get("user")}`
+    mydb1.get("shared").remove({ phone: `${ctx.params.num}` }).write();
+    yield ctx.redirect("/sample");
+}));
+router.post('/del/user/:num', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    //console.log('Successful')
+    mydb1.get(`${ctx.cookies.get("user")}`).remove({ phone: `${ctx.params.num}` }).write();
+    yield ctx.redirect("/sample");
+}));
+router.post('/add/user', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const contacts = mydb1.get(`${ctx.cookies.get("user")}`).value();
+    contacts.push(Object.assign({}, ctx.request.body));
+    yield ctx.redirect('/sample');
+}));
+router.post('/add/shared', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const shared = mydb1.get("shared").value();
+    shared.push(Object.assign({}, ctx.request.body));
+    yield ctx.redirect('/sample');
+}));
+router.post('/logout', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    ctx.cookies.set("user", "");
+    console.log("LoggedOut");
+    yield ctx.redirect('/');
 }));
 router.post('/', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const userl = mydb.get("users").value();
@@ -56,7 +89,8 @@ router.post('/', (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     if (flag) {
-        yield ctx.redirect(`/sample/con${uname}`);
+        ctx.cookies.set("user", `con${uname}`);
+        yield ctx.redirect("/sample");
     }
     if (!flag) {
         yield ctx.redirect('/');

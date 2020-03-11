@@ -1,0 +1,58 @@
+{
+  "conuser": [
+    {
+      "name": "A Chandu",
+      "phone": "125345678",
+      "email": "chandu@gmail.com"
+    },
+    {
+      "name": "A Chandish",
+      "phone": "12215658",
+      "email": "chaachdndu@gmail.com"
+    },
+    {
+      "name": "Chaithu",
+      "phone": "1365183",
+      "email": "cahdith@gmail.com"
+    }
+  ],
+  "concvr": [
+    {
+      "name": "Afroz sir",
+      "phone": "125345678",
+      "email": "chandu@gmail.com"
+    },
+    {
+      "name": "umar sir",
+      "phone": "12215658",
+      "email": "chaachdndu@gmail.com"
+    },
+    {
+      "name": "ram babu sir",
+      "phone": "1365183",
+      "email": "cahdith@gmail.com"
+    }
+  ],
+  "shared": [
+    {
+      "name": "Bhavesh",
+      "phone": "125345678",
+      "email": "bhaveshchinni1@gmail.com"
+    },
+    {
+      "name": "Ayyagaru",
+      "phone": "12215658",
+      "email": "akhil31e@gmail.com"
+    },
+    {
+      "name": "Tiger(Advith)",
+      "phone": "1365183",
+      "email": "ch.advith@gmail.com"
+    },
+    {
+      "name": "devraj",
+      "phone": "1234566789",
+      "email": "devraj@gmail.com"
+    }
+  ]
+}
