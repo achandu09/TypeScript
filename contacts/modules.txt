@@ -1,0 +1,6 @@
+install npm
+install koa
+install koa-pug
+install @router/koa
+install @types/koa
+
